@@ -52,13 +52,19 @@ parser.add_argument(
     default=os.environ.get("REDISCLOUD_URL", ""),
 )
 
+parser.add_argument(
+    "--data_dir", default=None, help="Directory where pneumonia data is stored"
+)
+
 parser.set_defaults(use_test_config=False)
 
 if __name__ == "__main__":
     args = parser.parse_args()
 
     # Create app
-    app = create_app(args.id, debug=False, database_url=args.db_url)
+    app = create_app(
+        args.id, debug=False, database_url=args.db_url, data_dir=args.data_dir
+    )
 
     # If using a Gateway URL start the connection
     if args.gateway_url is not None:
@@ -89,4 +95,6 @@ else:
                 {"node-id": node_id, "node-address": "{}".format(node_address)}
             ),
         )
-    app = create_app(node_id, debug=False, database_url=db_address)
+    app = create_app(
+        node_id, debug=False, database_url=db_address, data_dir=args.data_dir
+    )
